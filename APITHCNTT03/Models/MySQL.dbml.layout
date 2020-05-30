@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ordesignerObjectsDiagram dslVersion="1.0.0.0" absoluteBounds="0, 0, 11, 8.5" name="MySQL">
+  <DataContextMoniker Name="/MySQLDataContext" />
+  <nestedChildShapes>
+    <classShape Id="1fbcd039-fa1a-451c-9f00-1cbfcac61966" absoluteBounds="4.25, 2.75, 2, 1.9631982421875">
+      <DataClassMoniker Name="/MySQLDataContext/user_info" />
+      <nestedChildShapes>
+        <elementListCompartment Id="98e941a4-073a-44a5-885e-c64479d7bda9" absoluteBounds="4.265, 3.21, 1.9700000000000002, 1.4031982421875" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+  </nestedChildShapes>
+</ordesignerObjectsDiagram>
