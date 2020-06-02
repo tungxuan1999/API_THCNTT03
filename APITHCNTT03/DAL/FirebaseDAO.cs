@@ -9,8 +9,6 @@ using System.Web;
 using System.Web.Http;
 using System.Web.Http.Controllers;
 using System.Web.UI.WebControls;
-using FireSharp.Extensions;
-using Google.Cloud.Firestore;
 using Newtonsoft.Json;
 
 namespace APITHCNTT03.DAL
