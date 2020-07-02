@@ -112,6 +112,26 @@ namespace APITHCNTT03.Controllers
             return Json(token);
         }
 
+        [HttpPost]
+        [Route("api/backupfile")]
+        public IHttpActionResult Backup(BackupClass backupClass)
+        {
+            if(backupClass.Token == "7NSJ16DJDPOC7LXCFMT105JF8B3AQA56XTKE23HDOHCOVEODHX2QM5B1AAAL32X2GEH80BAC9GADRNFRLLRM8DALJJ4PQMAJP94FNDD5GLDBSN8CSG0D9TR34MOD7JLD5QPER0X77J")
+            {
+                return Json(new FirebaseDAO().backupfile(backupClass.Date, backupClass.Time));
+            }
+            else
+            {
+                return Json("false");
+            }
+        }
+
+        public class BackupClass {
+            public String Date { get; set; }
+            public String Time { get; set; }
+            public String Token { get; set; }
+        }
+
         public class Account
         {
             public string user { get; set; }

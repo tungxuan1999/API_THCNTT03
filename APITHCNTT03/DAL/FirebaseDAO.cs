@@ -15,6 +15,9 @@ namespace APITHCNTT03.DAL
 {
     public class FirebaseDAO
     {
+        String urlbackup = "https://smarthomebackup-3012f.firebaseio.com/";
+        String urlmain = "https://smarthome-a93f9.firebaseio.com/";
+
         //is... 0 false 1 true
 
         //kind 1: chay 2: trom
@@ -38,7 +41,7 @@ namespace APITHCNTT03.DAL
                 Response = Response
             });
 
-            var request = WebRequest.CreateHttp("https://smarthome-a93f9.firebaseio.com/Logs.json");
+            var request = WebRequest.CreateHttp(urlmain + "Logs.json");
             request.Method = "POST";
             request.ContentType = "application/json";
             var buffer = Encoding.UTF8.GetBytes(json);
@@ -78,7 +81,7 @@ namespace APITHCNTT03.DAL
                         break;
                 }
 
-                var request = WebRequest.CreateHttp("https://smarthome-a93f9.firebaseio.com/.json");
+                var request = WebRequest.CreateHttp(urlmain + ".json");
                 request.Method = "PATCH";
                 request.ContentType = "application/json";
                 var buffer = Encoding.UTF8.GetBytes(json);
@@ -94,6 +97,7 @@ namespace APITHCNTT03.DAL
             {
                 return false;
             }
+            setdatafirebackup();
             return true;
         }
 
@@ -130,7 +134,7 @@ namespace APITHCNTT03.DAL
                         break;
                 }
 
-                var request = WebRequest.CreateHttp("https://smarthome-a93f9.firebaseio.com/.json");
+                var request = WebRequest.CreateHttp(urlmain + ".json");
                 request.Method = "PATCH";
                 request.ContentType = "application/json";
                 var buffer = Encoding.UTF8.GetBytes(json);
@@ -144,6 +148,7 @@ namespace APITHCNTT03.DAL
             {
                 return false;
             }
+            setdatafirebackup();
             return true;
         }
 
@@ -156,12 +161,13 @@ namespace APITHCNTT03.DAL
                     Token = token
 
                 });
-                var request = WebRequest.CreateHttp("https://smarthome-a93f9.firebaseio.com/user/" + user + ".json");
+                var request = WebRequest.CreateHttp(urlmain + "user/" + user + ".json");
                 request.Method = "PATCH";
                 request.ContentType = "application/json";
                 var buffer = Encoding.UTF8.GetBytes(json);
                 request.ContentLength = buffer.Length;
                 request.GetRequestStream().Write(buffer, 0, buffer.Length);
+                setdatafirebackup();
                 return true;
             }
             catch (Exception ex)
@@ -172,7 +178,7 @@ namespace APITHCNTT03.DAL
 
         public Object getToken(string user)
         {
-            var request = WebRequest.CreateHttp("https://smarthome-a93f9.firebaseio.com/user/" + user + ".json");
+            var request = WebRequest.CreateHttp(urlmain + "user/" + user + ".json");
             request.Method = "GET";
             request.ContentType = "application/json";
 
@@ -185,7 +191,7 @@ namespace APITHCNTT03.DAL
         public Object getrealtime()
         {
 
-            var request = WebRequest.CreateHttp("https://smarthome-a93f9.firebaseio.com/.json");
+            var request = WebRequest.CreateHttp(urlmain + ".json");
             request.Method = "GET";
             request.ContentType = "application/json";
 
@@ -194,6 +200,56 @@ namespace APITHCNTT03.DAL
             JSONResponse rs = JsonConvert.DeserializeObject<JSONResponse>(json);
 
             return rs;
+        }
+
+        public void setdatafirebackup()
+        {
+            var request = WebRequest.CreateHttp(urlmain + ".json");
+            request.Method = "GET";
+            request.ContentType = "application/json";
+
+            var response = request.GetResponse();
+            var json = (new StreamReader(response.GetResponseStream())).ReadToEnd();
+
+            DateTime date = DateTime.Now;
+            string Date = date.ToString("dd:MM:yyyy");
+            string Time = date.ToString("HH:mm:ss");
+
+            var request2 = WebRequest.CreateHttp(urlbackup + "/" + Date + "/" + Time + ".json");
+            request2.Method = "PATCH";
+            request2.ContentType = "application/json";
+            var buffer = Encoding.UTF8.GetBytes(json);
+            request2.ContentLength = buffer.Length;
+            request2.GetRequestStream().Write(buffer, 0, buffer.Length);
+        }
+
+        public String backupfile(String Date, String Time)
+        {
+            var request = WebRequest.CreateHttp(urlbackup + "/" + Date + "/" + Time + ".json");
+            request.Method = "GET";
+            request.ContentType = "application/json";
+
+            var response = request.GetResponse();
+            var json = (new StreamReader(response.GetResponseStream())).ReadToEnd();
+
+            if (json != null)
+            {
+                var request2 = WebRequest.CreateHttp(urlmain + ".json");
+                request2.Method = "PATCH";
+                request2.ContentType = "application/json";
+                var buffer = Encoding.UTF8.GetBytes(json);
+                request2.ContentLength = buffer.Length;
+                request2.GetRequestStream().Write(buffer, 0, buffer.Length);
+
+                var response2 = request2.GetResponse();
+                var json2 = (new StreamReader(response2.GetResponseStream())).ReadToEnd();
+                JSONResponse rs = JsonConvert.DeserializeObject<JSONResponse>(json2);
+                return rs.ToString();
+            }
+            else
+            {
+                return "False";
+            }
         }
 
         public class JSONResponse
